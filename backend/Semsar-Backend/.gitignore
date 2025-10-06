@@ -1,0 +1,79 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build
+bin/
+obj/
+out/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# NuGet
+*.nupkg
+packages/
+*.snupkg
+project.lock.json
+
+# User secrets / local settings
+appsettings.Development.json
+secrets.json
+local.settings.json
+
+# Database
+*.mdf
+*.ldf
+
+# Others
+*.vsix
+*.dbmdl
+
+# Ignore Visual Studio Code workspace storage
+.vscode/*/workspaceStorage/
+
+# Ignore copilot snapshots (if any)
+.vs/CopilotSnapshots/
+
+
+
+# Test output
+TestResults/
+coverage/
+*.trx
+
+# User/Rider settings
+*.DotSettings.user
+*.csproj.user
+
+# JS dependencies
+node_modules/
+frontend/node_modules/
+
+# Frontend code (separate repo)
+frontend/
+
+# Temp files
+temp_swagger.json
+
+# Env files
+.env
+.env.*
+
+# Publish output
+publish/
+publish2/
+publish-test*/
+
+# ASP.NET Core data protection keys
+dataprotection-keys/
