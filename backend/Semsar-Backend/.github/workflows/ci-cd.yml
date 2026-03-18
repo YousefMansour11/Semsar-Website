@@ -1,0 +1,222 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  SOLUTION: RealEstate.slnx
+  PROJECT_PATH: API/API.csproj
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION }} --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ${{ env.SOLUTION }} --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Upload coverage
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: '**/coverage.cobertura.xml'
+
+  code-quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run dotnet format
+        run: dotnet format ${{ env.SOLUTION }}
+
+      - name: Run dotnet analyzer
+        run: dotnet build ${{ env.SOLUTION }} --configuration Release
+
+  deploy:
+    needs: [build, code-quality]
+    runs-on: windows-2022
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Publish (framework-dependent, in-process)
+        run: |
+          dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --output ./publish
+          Remove-Item -Path ./publish -Recurse -Include "*.pdb" -ErrorAction SilentlyContinue
+          Write-Host "Publish files: $( (Get-ChildItem ./publish -Recurse -File).Count )"
+
+      - name: Inject production configuration from secrets
+        shell: pwsh
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
+          Jwt__Key: ${{ secrets.JWT_KEY }}
+          Jwt__Issuer: "SemsarAPI"
+          Jwt__Audience: "SemsarUsers"
+          Cloudinary__ApiKey: ${{ secrets.CLOUDINARY_API_KEY }}
+          Cloudinary__ApiSecret: ${{ secrets.CLOUDINARY_API_SECRET }}
+          Smtp__User: ${{ secrets.SMTP_USER }}
+          Smtp__Pass: ${{ secrets.SMTP_PASS }}
+          AppSettings__BaseUrl: ${{ secrets.BASE_URL }}
+          AppSettings__AdminNotificationEmail: ${{ secrets.ADMIN_EMAIL }}
+        run: |
+          $configPath = Join-Path $pwd "publish" "appsettings.Production.json"
+          if (Test-Path $configPath) {
+            $json = Get-Content $configPath -Raw | ConvertFrom-Json
+            if ($env:ConnectionStrings__DefaultConnection) { $json.ConnectionStrings.DefaultConnection = $env:ConnectionStrings__DefaultConnection }
+            if ($env:Jwt__Key) { $json.Jwt.Key = $env:Jwt__Key }
+            if ($env:Cloudinary__ApiKey) { $json.Cloudinary.ApiKey = $env:Cloudinary__ApiKey }
+            if ($env:Cloudinary__ApiSecret) { $json.Cloudinary.ApiSecret = $env:Cloudinary__ApiSecret }
+            if ($env:Smtp__User) { $json.Smtp.User = $env:Smtp__User }
+            if ($env:Smtp__Pass) { $json.Smtp.Pass = $env:Smtp__Pass }
+            if ($env:AppSettings__BaseUrl) { $json.AppSettings.BaseUrl = $env:AppSettings__BaseUrl }
+            if ($env:AppSettings__AdminNotificationEmail) { $json.AppSettings.AdminNotificationEmail = $env:AppSettings__AdminNotificationEmail }
+            $json | ConvertTo-Json -Depth 10 | Set-Content $configPath
+            Write-Host "Production appsettings injected from GitHub Secrets"
+          } else {
+            Write-Host "##[warning]appsettings.Production.json not found in publish output"
+          }
+
+      - name: Deploy via FTP with app_offline.htm (retry + lock-safe)
+        shell: pwsh
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          $ftpHost = $env:FTP_HOST
+          $ftpUser = $env:FTP_USERNAME
+          $ftpPass = $env:FTP_PASSWORD
+          $localDir = Join-Path $pwd "publish"
+          $baseUrl = "ftp://${ftpHost}/wwwroot"
+          $maxRetries = 3
+
+          $cred = New-Object System.Net.NetworkCredential($ftpUser, $ftpPass)
+
+          function Invoke-FtpRequest($url, $method, $bytes = $null) {
+            $req = [System.Net.FtpWebRequest]::Create($url)
+            $req.Credentials = $cred
+            $req.Method = $method
+            $req.UseBinary = $true
+            if ($bytes -ne $null) {
+              $req.ContentLength = $bytes.Length
+              $rs = $req.GetRequestStream()
+              $rs.Write($bytes, 0, $bytes.Length)
+              $rs.Dispose()
+            }
+            $resp = $req.GetResponse()
+            $resp.Dispose()
+          }
+
+          # Step 1: Upload app_offline.htm to stop the app
+          Write-Host "=== Step 1: Taking app offline ==="
+          try {
+            $offline = [System.Text.Encoding]::UTF8.GetBytes("<!DOCTYPE html><html><head><title>Updating</title></head><body><h1>Site is updating — please wait...</h1><p>Deploying new version. Back in a moment.</p></body></html>")
+            Invoke-FtpRequest "${baseUrl}/app_offline.htm" ([System.Net.WebRequestMethods+Ftp]::UploadFile) $offline
+            Write-Host "app_offline.htm uploaded. Waiting 15s for app to shut down..."
+            Start-Sleep -Seconds 15
+          } catch {
+            Write-Host "##[warning]Failed to upload app_offline.htm: $_"
+          }
+
+          # Step 2: Upload all files with retry
+          Write-Host "=== Step 2: Uploading files ==="
+          $totalFiles = 0; $failedFiles = 0
+
+          Get-ChildItem -Recurse $localDir | ForEach-Object {
+            if ($_.PSIsContainer) { return }
+            if ($_.Extension -eq ".pdb") { return }
+
+            $relPath = $_.FullName.Substring($localDir.Length + 1).Replace("\", "/")
+            $remoteUrl = "${baseUrl}/${relPath}"
+            $fileName = $_.Name
+            $totalFiles++
+
+            # Ensure remote directory exists
+            $parentRel = [System.IO.Path]::GetDirectoryName($relPath).Replace("\", "/")
+            if ($parentRel -and $parentRel -ne "") {
+              $parts = $parentRel.Split("/")
+              $acc = $baseUrl
+              foreach ($part in $parts) {
+                $acc += "/$part"
+                try {
+                  Invoke-FtpRequest "${acc}/" ([System.Net.WebRequestMethods+Ftp]::MakeDirectory)
+                } catch { }
+              }
+            }
+
+            # Upload with retry
+            $uploaded = $false
+            $lastErr = $null
+            for ($attempt = 0; $attempt -lt $maxRetries; $attempt++) {
+              try {
+                $bytes = [System.IO.File]::ReadAllBytes($_.FullName)
+                Invoke-FtpRequest $remoteUrl ([System.Net.WebRequestMethods+Ftp]::UploadFile) $bytes
+                $uploaded = $true
+                break
+              } catch {
+                $lastErr = $_
+                if ($attempt -lt $maxRetries - 1) {
+                  Write-Host "  Retry $($attempt+1)/$maxRetries for $fileName"
+                  Start-Sleep -Seconds 3
+                }
+              }
+            }
+
+            if ($uploaded) {
+              Write-Host "  OK $fileName"
+            } else {
+              Write-Host "  FAIL $fileName : $($lastErr.Exception.Message)"
+              $failedFiles++
+            }
+          }
+
+          Write-Host "Uploaded $totalFiles files ($failedFiles failures)"
+
+          # Step 3: Delete app_offline.htm to restart the app
+          Write-Host "=== Step 3: Bringing app back online ==="
+          try {
+            Invoke-FtpRequest "${baseUrl}/app_offline.htm" ([System.Net.WebRequestMethods+Ftp]::DeleteFile)
+            Write-Host "app_offline.htm deleted. App restarting..."
+          } catch {
+            Write-Host "##[warning]Could not delete app_offline.htm (may have been auto-removed): $_"
+          }
+
+          if ($failedFiles -gt 0) {
+            Write-Host "##[error]$failedFiles files failed to upload"
+            exit 1
+          }
+
+          Write-Host "=== Deploy complete ==="
