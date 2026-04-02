@@ -1,0 +1,12 @@
+{
+  "name": "Semsar - Real Estate",
+  "short_name": "Semsar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b8860b",
+  "description": "Your trusted real estate platform for properties, projects, and units in Egypt",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
