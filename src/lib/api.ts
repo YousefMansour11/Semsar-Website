@@ -20,7 +20,7 @@ import type {
   LandRequestPayload,
 } from '../types/property';
 
-export const API_BASE = import.meta.env.VITE_API_BASE || 'https://semsar-hub.runasp.net';
+export const API_BASE = import.meta.env.VITE_API_BASE || 'https://semsar-hub.runasp.net/api';
 
 const FALLBACK_IMG = '/placeholder.svg';
 
@@ -266,19 +266,19 @@ export interface PropertyFilterParams {
 }
 
 export async function fetchProperties(params: PropertyFilterParams = {}): Promise<Property[]> {
-  const raw = await request<any>(`/api/Properties/filter${qs(params as any)}`);
+  const raw = await request<any>(`/Properties/filter${qs(params as any)}`);
   return toArray(raw).map(adaptProperty);
 }
 
 export async function fetchPropertyBySlug(slug: string): Promise<Property | null> {
   try {
-    const raw = await request<any>(`/api/Properties/slug/${encodeURIComponent(slug)}`);
+    const raw = await request<any>(`/Properties/slug/${encodeURIComponent(slug)}`);
     return raw ? adaptProperty(raw) : null;
   } catch (e) {
     if (!(e instanceof ApiError && e.status === 404)) throw e;
   }
   try {
-    const raw = await request<any>(`/api/Units/slug/${encodeURIComponent(slug)}`);
+    const raw = await request<any>(`/Units/slug/${encodeURIComponent(slug)}`);
     return raw ? adaptProperty(raw) : null;
   } catch (e2) {
     if (e2 instanceof ApiError && e2.status === 404) return null;
@@ -293,7 +293,7 @@ export async function fetchFilterMetadata() {
       locationsAr: string[];
       propertyTypes: { value: string; name: string }[];
       listingTypes: { value: string; name: string }[];
-    }>(`/api/Properties/filter/metadata`);
+    }>(`/Properties/filter/metadata`);
   } catch {
     return { locations: [], locationsAr: [], propertyTypes: [], listingTypes: [] };
   }
@@ -302,7 +302,7 @@ export async function fetchFilterMetadata() {
 // ---- Projects ----
 export async function fetchProjects(): Promise<Project[]> {
   try {
-    const raw = await request<any>(`/api/Projects?page=1&pageSize=50`);
+    const raw = await request<any>(`/Projects?page=1&pageSize=50`);
     const list = toArray<any>(raw);
     return list.map(p => adaptProject(p));
   } catch {
@@ -312,13 +312,13 @@ export async function fetchProjects(): Promise<Project[]> {
 
 export async function fetchProjectBySlug(slug: string): Promise<Project | null> {
   try {
-    const raw = await request<any>(`/api/Projects/slug/${encodeURIComponent(slug)}`);
+    const raw = await request<any>(`/Projects/slug/${encodeURIComponent(slug)}`);
     if (!raw) return null;
     const projectId = raw?.id;
     let units: Property[] = [];
     if (projectId != null) {
       try {
-        const unitsRaw = await request<any>(`/api/Units${qs({ projectId, page: 1, pageSize: 100 })}`);
+        const unitsRaw = await request<any>(`/Units${qs({ projectId, page: 1, pageSize: 100 })}`);
         units = toArray<any>(unitsRaw).map(adaptProperty);
       } catch { /* ignore unit fetch errors */ }
     }
@@ -332,13 +332,13 @@ export async function fetchProjectBySlug(slug: string): Promise<Project | null> 
 // ---- Units ----
 export async function fetchUnitBySlug(slug: string): Promise<Property | null> {
   try {
-    const raw = await request<any>(`/api/Units/slug/${encodeURIComponent(slug)}`);
+    const raw = await request<any>(`/Units/slug/${encodeURIComponent(slug)}`);
     return raw ? adaptProperty(raw) : null;
   } catch (e) {
     if (!(e instanceof ApiError && e.status === 404)) throw e;
   }
   try {
-    const raw = await request<any>(`/api/Properties/slug/${encodeURIComponent(slug)}`);
+    const raw = await request<any>(`/Properties/slug/${encodeURIComponent(slug)}`);
     return raw ? adaptProperty(raw) : null;
   } catch (e2) {
     if (e2 instanceof ApiError && e2.status === 404) return null;
@@ -350,7 +350,7 @@ export async function fetchUnitBySlug(slug: string): Promise<Property | null> {
 export async function fetchSettings(): Promise<SiteSettings> {
   let raw: any;
   try {
-    raw = await request<any>(`/api/settings`);
+    raw = await request<any>(`/settings`);
   } catch {
     raw = {};
   }
@@ -376,7 +376,7 @@ function getHoneypotAndTimestamp(submittedAt?: string) {
 
 // ---- Submissions ----
 export async function submitBooking(p: BookingPayload, submittedAt?: string) {
-  return request<unknown>(`/api/bookings`, {
+  return request<unknown>(`/bookings`, {
     method: 'POST',
     body: JSON.stringify({
       ...p,
@@ -395,7 +395,7 @@ export async function submitBooking(p: BookingPayload, submittedAt?: string) {
 }
 
 export async function submitLandRequest(p: LandRequestPayload) {
-  return request<unknown>(`/api/land-requests`, {
+  return request<unknown>(`/land-requests`, {
     method: 'POST',
     body: JSON.stringify({
       ...p,
@@ -429,7 +429,7 @@ export async function submitLead(p: {
   lastReferrer?: string;
   visitHistory?: string;
 }) {
-  return request<unknown>(`/api/leads`, {
+  return request<unknown>(`/leads`, {
     method: 'POST',
     body: JSON.stringify({
       ...p,
