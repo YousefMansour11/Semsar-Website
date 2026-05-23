@@ -20,7 +20,7 @@ import type {
   LandRequestPayload,
 } from '../types/property';
 
-export const API_BASE = import.meta.env.VITE_API_BASE || 'https://semsar-hub.runasp.net/api';
+export const API_BASE = '/api';
 
 const FALLBACK_IMG = '/placeholder.svg';
 
