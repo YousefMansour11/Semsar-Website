@@ -55,10 +55,17 @@ export function PremiumImage({
   const handleLoad = () => setLoaded(true);
   const handleError = () => { setError(true); setLoaded(true); };
 
+  const containerStyle: React.CSSProperties = {};
+  if (aspectRatio) {
+    containerStyle.aspectRatio = aspectRatio;
+  } else if (width && height && !className?.includes('absolute')) {
+    containerStyle.aspectRatio = `${width}/${height}`;
+  }
+
   return (
     <div
       className={`relative overflow-hidden ${className}`}
-      style={{ aspectRatio: aspectRatio || (width && height ? `${width}/${height}` : undefined) }}
+      style={containerStyle}
     >
       {!error && (
         <img
