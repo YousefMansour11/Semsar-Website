@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 216 60% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 216 60% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 60% 10%;
+
+    --primary: 216 60% 10%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 206 72% 38%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 214 32% 91%;
+    --muted-foreground: 215 20% 40%;
+
+    --accent: 44 55% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 206 72% 38%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 216 60% 10%;
+    --foreground: 210 20% 98%;
+
+    --card: 216 45% 12%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 216 45% 12%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 216 60% 10%;
+
+    --secondary: 206 72% 38%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 216 30% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 44 55% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 216 30% 18%;
+    --input: 216 30% 18%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', 'Tajawal', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'Tajawal', serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Embla Carousel */
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+/* Hero stagger animation — replaces framer-motion */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-children > * {
+  opacity: 0;
+  animation: fadeUp 0.6s ease-out forwards;
+}
+.fade-children > *:nth-child(1) { animation-delay: 0s; }
+.fade-children > *:nth-child(2) { animation-delay: 0.12s; }
+.fade-children > *:nth-child(3) { animation-delay: 0.24s; }
+.fade-children > *:nth-child(4) { animation-delay: 0.36s; }
+
+/* Scroll reveal — replaces framer-motion whileInView */
+@keyframes fadeUpIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+}
+.reveal-on-scroll.visible {
+  animation: fadeUpIn 0.5s ease-out forwards;
+}
+
+.reveal-stagger > .reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.reveal-stagger.visible > .reveal-item {
+  animation: fadeUpIn 0.5s ease-out forwards;
+}
+.reveal-stagger.visible > .reveal-item:nth-child(1) { animation-delay: 0s; }
+.reveal-stagger.visible > .reveal-item:nth-child(2) { animation-delay: 0.1s; }
+.reveal-stagger.visible > .reveal-item:nth-child(3) { animation-delay: 0.2s; }
+.reveal-stagger.visible > .reveal-item:nth-child(4) { animation-delay: 0.3s; }
+.reveal-stagger.visible > .reveal-item:nth-child(5) { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-children > *,
+  .reveal-on-scroll,
+  .reveal-stagger > .reveal-item {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
