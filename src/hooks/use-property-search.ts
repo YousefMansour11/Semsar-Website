@@ -98,7 +98,7 @@ export async function fetchPropertySearch(filters: SearchFilters): Promise<{ pro
     pageSize: filters.pageSize || 50,
   };
 
-  const res = await fetch(`${API_BASE}/api/properties/search${qs(params)}`);
+  const res = await fetch(`${API_BASE}/properties/search${qs(params)}`);
   if (!res.ok) throw new Error(`Search failed (${res.status})`);
   const json: PropertySearchResponse = await res.json();
   return {

@@ -14,7 +14,7 @@ export interface LocationTreeNode {
 }
 
 async function fetchLocationTree(): Promise<LocationTreeNode[]> {
-  const res = await fetch(`${API_BASE}/api/locations/tree`);
+  const res = await fetch(`${API_BASE}/locations/tree`);
   if (!res.ok) throw new Error(`Failed to fetch location tree (${res.status})`);
   return res.json();
 }
@@ -51,7 +51,7 @@ export interface LocationSearchResult {
 
 async function fetchLocationSearch(query: string): Promise<LocationSearchResult[]> {
   if (!query || query.length < 2) return [];
-  const res = await fetch(`${API_BASE}/api/locations/search?q=${encodeURIComponent(query)}&maxResults=15`);
+  const res = await fetch(`${API_BASE}/locations/search?q=${encodeURIComponent(query)}&maxResults=15`);
   if (!res.ok) throw new Error(`Failed to search locations (${res.status})`);
   return res.json();
 }
