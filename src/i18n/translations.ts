@@ -427,6 +427,7 @@ export const translations: Record<string, Record<string, string>> = {
     'filters.maxSize': 'أقصى مساحة',
     'filters.noLocations': 'لا توجد مواقع متاحة',
     'filters.noTypes': 'لا توجد أنواع عقارات متاحة',
+    'filters.searchLocation': 'ابحث عن موقع...',
     'filters.searchGovernorate': 'ابحث عن محافظة...',
     'filters.searchCity': 'ابحث عن مدينة...',
     'filters.searchArea': 'ابحث عن منطقة...',

@@ -3,8 +3,10 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { Header } from '../components/SiteHeader';
 import SeoHelmet from '../components/SeoHelmet';
 import { SiteFooter } from '../components/SiteFooter';
+import { getSiteUrl } from '../lib/paths';
 import { ProjectsSlider } from '../components/ProjectsSlider';
 import { PropertyCard } from '../components/PropertyCard';
+import { PremiumImage } from '../components/PremiumImage';
 import { AdvancedFilterPanel } from '../components/AdvancedFilterPanel';
 import { LandRequestModal } from '../components/LandRequestModal';
 import { useProjects } from '../hooks/use-properties';
@@ -80,6 +82,9 @@ function FilterChips({ filters, onClear }: { filters: SearchFilters; onClear: (k
   );
 }
 
+const CLOUD_NAME = 'dhtgqemls';
+const HERO_BG = `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/f_auto,q_auto/${typeof window !== 'undefined' ? window.location.origin : 'https://semsar-alpha.vercel.app'}/images/hero-bg.jpg`;
+
 const stats = [
   { value: '150+', labelKey: 'stats.properties' },
   { value: '5', labelKey: 'stats.locations' },
@@ -123,7 +128,12 @@ const Index = () => {
       <SeoHelmet
         title={t('hero.title')}
         description={t('seo.homeDescription')}
-        canonical={typeof window !== 'undefined' ? window.location.origin : undefined}
+        canonical={typeof window !== 'undefined' ? window.location.href : 'https://semsar-alpha.vercel.app/'}
+        alternates={[
+          { hrefLang: 'en', href: `${getSiteUrl()}/en` },
+          { hrefLang: 'ar', href: `${getSiteUrl()}/ar` },
+          { hrefLang: 'x-default', href: `${getSiteUrl()}/en` },
+        ]}
         jsonLd={JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'RealEstateAgent',
@@ -142,7 +152,17 @@ const Index = () => {
       <section className="relative h-[85vh] sm:h-screen min-h-[500px] sm:min-h-[640px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-navy/80 via-navy/50 to-transparent z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
-        <img src="/images/hero-bg.jpg" alt={t('hero.alt')} fetchpriority="high" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1080} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+        <PremiumImage
+          src={HERO_BG}
+          alt={t('hero.alt')}
+          width={1920}
+          height={1080}
+          priority
+          className="absolute inset-0 w-full h-full"
+          imgClassName="w-full h-full object-cover scale-105"
+          sizes="100vw"
+          srcsetWidths={[480, 768, 1080, 1600, 1920]}
+        />
 
         <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 sm:mt-20">
           <div className="space-y-4 sm:space-y-6 fade-children">

@@ -8,9 +8,9 @@ import { MobileStickyBar } from '../components/MobileStickyBar';
 import { BookViewingModal } from '../components/BookViewingModal';
 import SeoHelmet from '../components/SeoHelmet';
 import { useLanguage } from '../i18n/LanguageContext';
+import { localizedPath } from '../lib/paths';
 import { MapPin, Square, Check, Eye, MessageCircle, Calendar, PhoneCall, ArrowLeft, ArrowRight, Bed, Bath, ArrowUpDown, Hash, Building, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
 import { PremiumImage } from '../components/PremiumImage';
-import { optimizeCloudinaryUrl } from '../lib/utils';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
 
@@ -57,15 +57,19 @@ export default function UnitDetailsPage() {
   };
   const installmentPlans = unit.installments?.length ? unit.installments : (unit.installment ? [unit.installment] : []);
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const unitPath = `/units/${unit.slug}`;
 
   return (
     <div className="min-h-screen bg-background pt-20">
       <SeoHelmet
         title={title}
         description={description?.slice(0, 160)}
-        canonical={`${origin}/units/${unit.slug}`}
+        canonical={`${origin}${localizedPath(unitPath, language)}`}
         image={gallery[0]}
-        preload={gallery[0] ? [{ href: optimizeCloudinaryUrl(gallery[0], { width: 1600, quality: 'best', crop: 'fill', gravity: 'center', sharpen: 'soft' }), as: 'image' }] : undefined}
+        alternates={[
+          { hrefLang: 'en', href: `${origin}${localizedPath(unitPath, 'en')}` },
+          { hrefLang: 'ar', href: `${origin}${localizedPath(unitPath, 'ar')}` },
+        ]}
         jsonLd={JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'RealEstateListing',
@@ -81,7 +85,7 @@ export default function UnitDetailsPage() {
       <div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <button onClick={() => { if (project?.slug) navigate(`/projects/${project.slug}`); else navigate(-1); }} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 sm:mb-8 font-medium text-sm transition-colors group p-3 -ml-3 min-h-[44px]">
+        <button onClick={() => { if (project?.slug) navigate(localizedPath(`/projects/${project.slug}`, language)); else navigate(-1); }} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 sm:mb-8 font-medium text-sm transition-colors group p-3 -ml-3 min-h-[44px]">
           {language === 'ar' ? <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /> : <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />}
           {t('general.back')}
         </button>

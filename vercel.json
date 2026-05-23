@@ -28,6 +28,10 @@
   ],
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "https://semsar-hub.runasp.net/sitemap.xml"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "https://semsar-hub.runasp.net/api/$1"
     },

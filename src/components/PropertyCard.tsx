@@ -4,6 +4,7 @@ import { MapPin, Bed, Square } from 'lucide-react';
 import { Property } from '../types/property';
 import { useLanguage } from '../i18n/LanguageContext';
 import { formatPrice } from '../lib/utils';
+import { localizedPath } from '../lib/paths';
 import { PremiumImage } from './PremiumImage';
 
 interface PropertyCardProps {
@@ -34,7 +35,7 @@ export const PropertyCard = memo(function PropertyCard({ property }: PropertyCar
 
   return (
     <Link
-      to={`/properties/${property.slug}`}
+      to={localizedPath(`/properties/${property.slug}`, language)}
       className="group block bg-card rounded-2xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 active:scale-[0.98]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">

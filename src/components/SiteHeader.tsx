@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { type Language } from '../i18n/translations';
+import { localizedPath, stripLanguagePrefix } from '../lib/paths';
 import { Menu, X, Globe } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { LogoIcon } from './LogoIcon';
@@ -11,7 +12,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  const isHomePage = location.pathname === '/';
+  const isHomePage = stripLanguagePrefix(location.pathname) === '/';
   const showSolid = !isHomePage || isScrolled;
 
   useEffect(() => {
@@ -62,9 +63,9 @@ export function Header() {
           : 'bg-transparent py-3 sm:py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[max(env(safe-area-inset-top,0px),0px)]">
         <div className="flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2 group shrink-0">
+          <Link to={localizedPath('/', language)} className="flex items-center gap-2 group shrink-0">
             <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center p-1 transition-all duration-300 ${
               showSolid
                 ? 'bg-[#0A1628]'
@@ -89,7 +90,7 @@ export function Header() {
               isRoute ? (
                 <Link
                   key={href}
-                  to={href}
+                  to={localizedPath(href, language)}
                   className={`relative px-3 lg:px-4 py-2 text-sm font-medium transition-all duration-200 group rounded-lg ${
                     showSolid ? 'text-gray-500 hover:text-navy' : 'text-white/75 hover:text-white'
                   }`}
@@ -121,7 +122,10 @@ export function Header() {
               {languages.map(lang => (
                 <button
                   key={lang.code}
-                  onClick={() => setLanguage(lang.code)}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    navigate(localizedPath(stripLanguagePrefix(location.pathname), lang.code), { replace: true });
+                  }}
                   className={`text-xs font-bold px-3 min-h-[44px] rounded-lg transition-all duration-200 ${
                     language === lang.code
                       ? 'bg-gold text-white shadow-sm'
@@ -160,7 +164,7 @@ export function Header() {
               isRoute ? (
                 <Link
                   key={href}
-                  to={href}
+                  to={localizedPath(href, language)}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium text-sm"
                 >
@@ -183,7 +187,11 @@ export function Header() {
               {languages.map(lang => (
                 <button
                   key={lang.code}
-                  onClick={() => { setLanguage(lang.code); setIsMobileMenuOpen(false); }}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    setIsMobileMenuOpen(false);
+                    navigate(localizedPath(stripLanguagePrefix(location.pathname), lang.code), { replace: true });
+                  }}
                   className={`py-2.5 rounded-xl text-sm font-bold transition-colors ${
                     language === lang.code
                       ? 'bg-gold text-white shadow-sm'

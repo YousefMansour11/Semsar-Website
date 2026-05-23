@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import { ScrollManager } from "./components/ScrollManager";
 import { HelmetProvider } from "react-helmet-async";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { LanguageProvider } from "./i18n/LanguageContext";
+import { LanguageProvider, useLanguage } from "./i18n/LanguageContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import * as Sentry from "@sentry/react";
 import { initTracker } from "./lib/tracker";
@@ -28,6 +28,14 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+function LangWrap({ lang }: { lang: string }) {
+  const { setLanguage } = useLanguage();
+  useEffect(() => {
+    if (lang === 'en' || lang === 'ar') setLanguage(lang);
+  }, [lang, setLanguage]);
+  return <Outlet />;
+}
 
 function TrackerInit() {
   useEffect(() => { initTracker(); }, []);
@@ -55,6 +63,26 @@ const App = () => (
               <ScrollManager>
                 <Suspense fallback={null}>
                   <Routes>
+                    {/* Language-prefixed routes */}
+                    <Route path="/en" element={<LangWrap lang="en" />}>
+                      <Route index element={<ErrorBoundary><Index /></ErrorBoundary>} />
+                      <Route path="properties/:slug" element={<ErrorBoundary><PropertyDetailsPage /></ErrorBoundary>} />
+                      <Route path="projects/:slug" element={<ErrorBoundary><ProjectDetailsPage /></ErrorBoundary>} />
+                      <Route path="units/:slug" element={<ErrorBoundary><UnitDetailsPage /></ErrorBoundary>} />
+                      <Route path="about" element={<ErrorBoundary><AboutPage /></ErrorBoundary>} />
+                      <Route path="contact" element={<ErrorBoundary><ContactPage /></ErrorBoundary>} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                    <Route path="/ar" element={<LangWrap lang="ar" />}>
+                      <Route index element={<ErrorBoundary><Index /></ErrorBoundary>} />
+                      <Route path="properties/:slug" element={<ErrorBoundary><PropertyDetailsPage /></ErrorBoundary>} />
+                      <Route path="projects/:slug" element={<ErrorBoundary><ProjectDetailsPage /></ErrorBoundary>} />
+                      <Route path="units/:slug" element={<ErrorBoundary><UnitDetailsPage /></ErrorBoundary>} />
+                      <Route path="about" element={<ErrorBoundary><AboutPage /></ErrorBoundary>} />
+                      <Route path="contact" element={<ErrorBoundary><ContactPage /></ErrorBoundary>} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                    {/* Flat routes (backward compat) */}
                     <Route path="/" element={<ErrorBoundary><Index /></ErrorBoundary>} />
                     <Route path="/properties/:slug" element={<ErrorBoundary><PropertyDetailsPage /></ErrorBoundary>} />
                     <Route path="/projects/:slug" element={<ErrorBoundary><ProjectDetailsPage /></ErrorBoundary>} />

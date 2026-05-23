@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { submitLead, ApiError } from '../lib/api';
 import { getTrackingFields } from '../lib/tracker';
 import { useSettings } from '../hooks/use-settings';
+import { getSiteUrl } from '../lib/paths';
 import { Phone, Mail, MapPin, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function ContactPage() {
@@ -53,7 +54,11 @@ export default function ContactPage() {
       <SeoHelmet
         title={t('seo.contactTitle')}
         description={t('seo.contactDescription')}
-        canonical={typeof window !== 'undefined' ? `${window.location.origin}/contact` : undefined}
+        canonical={typeof window !== 'undefined' ? window.location.href : undefined}
+        alternates={[
+          { hrefLang: 'en', href: `${getSiteUrl()}/en/contact` },
+          { hrefLang: 'ar', href: `${getSiteUrl()}/ar/contact` },
+        ]}
       />
       <Header />
 

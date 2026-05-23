@@ -2,6 +2,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogoIcon } from './LogoIcon';
+import { localizedPath } from '../lib/paths';
 import { useSettings, whatsappLink } from '../hooks/use-settings';
 import { useProjects } from '../hooks/use-properties';
 
@@ -46,7 +47,7 @@ export function SiteFooter() {
 
           {/* Brand — full width on mobile/tablet, 1col on desktop */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <Link to="/" className="inline-flex items-center gap-3 mb-3 group">
+            <Link to={localizedPath('/', language)} className="inline-flex items-center gap-3 mb-3 group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
                 <LogoIcon variant="gold" />
               </div>
@@ -85,9 +86,9 @@ export function SiteFooter() {
               {quickLinks.map((item) => (
                 <li key={item.label}>
                   {'to' in item ? (
-                    <Link to={item.to!} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 inline-block py-1">{item.label}</Link>
+                    <Link to={localizedPath(item.to!, language)} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 inline-block py-1">{item.label}</Link>
                   ) : (
-                    <button onClick={() => navigate('/', { state: { scrollTo: 'scrollTo' in item ? item.scrollTo : null } })} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 text-start py-1">{item.label}</button>
+                    <button onClick={() => navigate(localizedPath('/', language), { state: { scrollTo: 'scrollTo' in item ? item.scrollTo : null } })} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 text-start py-1">{item.label}</button>
                   )}
                 </li>
               ))}
@@ -107,7 +108,7 @@ export function SiteFooter() {
               ) : projects?.length ? (
                 projects.slice(0, 5).map(p => (
                   <li key={p.slug}>
-                    <Link to={`/projects/${p.slug}`} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 inline-block py-1">
+                    <Link to={localizedPath(`/projects/${p.slug}`, language)} className="text-white/55 hover:text-white text-xs sm:text-sm transition-colors duration-200 inline-block py-1">
                       {language === 'ar' ? p.nameAr || p.nameEn || p.name : p.nameEn || p.name}
                     </Link>
                   </li>
@@ -123,7 +124,7 @@ export function SiteFooter() {
             <h4 className="font-bold text-[11px] sm:text-xs uppercase tracking-[0.15em] text-gold/80 mb-3 sm:mb-5">
               {t('footer.contactUs')}
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-1 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 gap-2 sm:gap-3">
               {contactItems.map((item, i) => (
                 <div key={i}>
                   {'href' in item && item.href ? (

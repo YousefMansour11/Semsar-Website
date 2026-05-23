@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { Project } from '../types/property';
 import { useLanguage } from '../i18n/LanguageContext';
+import { localizedPath } from '../lib/paths';
 import { PremiumImage } from './PremiumImage';
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -12,7 +13,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <Link
-      to={`/projects/${project.slug}`}
+      to={localizedPath(`/projects/${project.slug}`, language)}
       className="group relative block rounded-2xl overflow-hidden aspect-[3/4] isolate bg-muted hover:shadow-2xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 active:scale-[0.98]"
     >
       <div className="absolute inset-0">

@@ -3,6 +3,7 @@ import { SiteFooter } from '../components/SiteFooter';
 import SeoHelmet from '../components/SeoHelmet';
 import { useLanguage } from '../i18n/LanguageContext';
 import { MapPin, Shield, Users, TrendingUp } from 'lucide-react';
+import { getSiteUrl } from '../lib/paths';
 
 export default function AboutPage() {
   const { t } = useLanguage();
@@ -12,7 +13,11 @@ export default function AboutPage() {
       <SeoHelmet
         title={t('seo.aboutTitle')}
         description={t('seo.aboutDescription')}
-        canonical={typeof window !== 'undefined' ? `${window.location.origin}/about` : undefined}
+        canonical={typeof window !== 'undefined' ? window.location.href : undefined}
+        alternates={[
+          { hrefLang: 'en', href: `${getSiteUrl()}/en/about` },
+          { hrefLang: 'ar', href: `${getSiteUrl()}/ar/about` },
+        ]}
       />
       <Header />
 

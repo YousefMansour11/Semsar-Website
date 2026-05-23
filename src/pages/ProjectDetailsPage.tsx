@@ -9,8 +9,8 @@ import { MobileStickyBar } from '../components/MobileStickyBar';
 import SeoHelmet from '../components/SeoHelmet';
 import { MapPin, Check, ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { localizedPath } from '../lib/paths';
 import { PremiumImage } from '../components/PremiumImage';
-import { optimizeCloudinaryUrl } from '../lib/utils';
 import { ProjectDetailSkeleton } from '../components/Skeletons';
 
 export default function ProjectDetailsPage() {
@@ -21,7 +21,7 @@ export default function ProjectDetailsPage() {
   const [descExpanded, setDescExpanded] = useState(false);
   const whatsappNumber = settings?.whatsappNumber || '+201558730895';
   const phoneNumber = settings?.phoneNumber || whatsappNumber;
-  const heroImg = project?.images?.[0] || project?.image || '';
+  const heroImg = project?.images?.[0] || project?.image || '/placeholder.svg';
 
   if (isLoading) {
     return <ProjectDetailSkeleton />;
@@ -40,15 +40,19 @@ export default function ProjectDetailsPage() {
   const name = language === 'ar' ? project.nameAr : project.nameEn;
   const description = language === 'ar' ? project.descriptionAr : project.descriptionEn;
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const projectPath = `/projects/${project.slug}`;
 
   return (
     <div className="min-h-screen bg-background">
       <SeoHelmet
         title={name}
         description={description?.slice(0, 160)}
-        canonical={`${origin}/projects/${project.slug}`}
+        canonical={`${origin}${localizedPath(projectPath, language)}`}
         image={project.image}
-        preload={heroImg ? [{ href: optimizeCloudinaryUrl(heroImg, { width: 1600, quality: 'best', crop: 'fill', gravity: 'center', sharpen: 'soft' }), as: 'image' }] : undefined}
+        alternates={[
+          { hrefLang: 'en', href: `${origin}${localizedPath(projectPath, 'en')}` },
+          { hrefLang: 'ar', href: `${origin}${localizedPath(projectPath, 'ar')}` },
+        ]}
         jsonLd={JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'RealEstateProject',
@@ -83,7 +87,7 @@ export default function ProjectDetailsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 font-medium text-sm transition-colors group p-3 -ml-3 min-h-[44px]">
+        <Link to={localizedPath('/', language)} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 font-medium text-sm transition-colors group p-3 -ml-3 min-h-[44px]">
           {language === 'ar' ? <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /> : <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />}
           {t('nav.home')}
         </Link>
