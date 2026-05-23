@@ -10,7 +10,7 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-Sitemap: https://semsar-alpha.vercel.app/sitemap.xml
+Sitemap: https://semsar-web-alpha.vercel.app/sitemap.xml
 
 User-agent: *
 Allow: /
