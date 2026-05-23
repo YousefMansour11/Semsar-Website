@@ -1,7 +1,7 @@
 import { useLanguage } from '../i18n/LanguageContext';
 
 function Pulse({ className = '' }: { className?: string }) {
-  return <div className={`bg-muted/60 animate-pulse rounded-xl ${className}`} />;
+  return <div className={`bg-gradient-to-r from-muted/40 via-muted/60 to-muted/40 animate-pulse rounded-xl ${className}`} />;
 }
 
 export function PropertyCardSkeleton() {

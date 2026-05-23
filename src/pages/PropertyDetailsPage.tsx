@@ -150,67 +150,24 @@ export default function PropertyDetailsPage() {
               </div>
 
               {/* Specs */}
-              <div className="flex flex-wrap gap-3 sm:gap-6 py-4 sm:py-6 border-y border-border">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary"><Bed className="w-5 h-5" /></div>
-                  <div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.type')}</div>
-                    <div className="font-bold text-sm sm:text-base">{t(`prop_type.${property.type}`)}</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gold/10 flex items-center justify-center text-amber-600"><Square className="w-5 h-5" /></div>
-                  <div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.size')}</div>
-                    <div className="font-bold text-sm sm:text-base">{fmtNum(property.size)} {t('general.m2')}</div>
-                  </div>
-                </div>
-
-                {property.bedrooms != null && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600"><Bed className="w-5 h-5" /></div>
+              <div className="flex flex-wrap gap-3 sm:gap-6 py-5 sm:py-6 border-y border-border">
+                {[
+                  { icon: <Bed className="w-5 h-5" />, bg: 'bg-secondary/10', color: 'text-secondary', label: t('property.type'), value: t(`prop_type.${property.type}`) },
+                  { icon: <Square className="w-5 h-5" />, bg: 'bg-gold/10', color: 'text-amber-600', label: t('property.size'), value: `${fmtNum(property.size)} ${t('general.m2')}` },
+                  ...(property.bedrooms != null ? [{ icon: <Bed className="w-5 h-5" />, bg: 'bg-blue-500/10', color: 'text-blue-600', label: t('property.bedrooms'), value: fmtNum(property.bedrooms) }] : []),
+                  ...(property.bathrooms != null ? [{ icon: <Bath className="w-5 h-5" />, bg: 'bg-cyan-500/10', color: 'text-cyan-600', label: t('property.bathrooms'), value: fmtNum(property.bathrooms) }] : []),
+                  ...(property.floor != null ? [{ icon: <ArrowUpDown className="w-5 h-5" />, bg: 'bg-purple-500/10', color: 'text-purple-600', label: t('property.floor'), value: `${fmtNum(property.floor)}${property.totalFloors != null ? `/${fmtNum(property.totalFloors)}` : ''}` }] : []),
+                  ...(property.view && property.view !== 'Unknown' ? [{ icon: <Eye className="w-5 h-5" />, bg: 'bg-amber-500/10', color: 'text-amber-600', label: t('property.view'), value: t(`view.${property.view}`) }] : []),
+                  ...(property.isFurnished ? [{ icon: <Check className="w-5 h-5" />, bg: 'bg-emerald-500/10', color: 'text-emerald-600', label: t('property.furnished'), value: t('general.yes') }] : []),
+                ].map((spec, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${spec.bg} flex items-center justify-center ${spec.color}`}>{spec.icon}</div>
                     <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.bedrooms')}</div>
-                      <div className="font-bold text-sm sm:text-base">{fmtNum(property.bedrooms)}</div>
+                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{spec.label}</div>
+                      <div className="font-bold text-sm sm:text-base">{spec.value}</div>
                     </div>
                   </div>
-                )}
-                {property.bathrooms != null && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-600"><Bath className="w-5 h-5" /></div>
-                    <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.bathrooms')}</div>
-                      <div className="font-bold text-sm sm:text-base">{fmtNum(property.bathrooms)}</div>
-                    </div>
-                  </div>
-                )}
-                {property.floor != null && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-600"><ArrowUpDown className="w-5 h-5" /></div>
-                    <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.floor')}</div>
-                      <div className="font-bold text-sm sm:text-base">{fmtNum(property.floor)}{property.totalFloors != null ? `/${fmtNum(property.totalFloors)}` : ''}</div>
-                    </div>
-                  </div>
-                )}
-                {property.view && property.view !== 'Unknown' && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600"><Eye className="w-5 h-5" /></div>
-                    <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.view')}</div>
-                      <div className="font-bold text-sm sm:text-base">{t(`view.${property.view}`)}</div>
-                    </div>
-                  </div>
-                )}
-                {property.isFurnished && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600"><Check className="w-5 h-5" /></div>
-                    <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide">{t('property.furnished')}</div>
-                      <div className="font-bold text-sm sm:text-base">{t('general.yes')}</div>
-                    </div>
-                  </div>
-                )}
+                ))}
               </div>
             </div>
 

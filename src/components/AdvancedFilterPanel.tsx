@@ -121,10 +121,10 @@ export function AdvancedFilterPanel({ filters, onApply, priceSuffix = 'EGP' }: P
       <button
         onClick={openPanel}
         aria-label={t('filters.filter')}
-        className={`min-h-[44px] flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border transition-all duration-200 shadow-sm ${
+        className={`min-h-[44px] flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border transition-all duration-200 ${
           active
-            ? 'bg-secondary text-white border-secondary shadow-secondary/30 shadow-md'
-            : 'bg-card text-foreground border-border hover:border-secondary/50 hover:shadow-md'
+            ? 'bg-secondary text-white border-secondary shadow-lg shadow-secondary/20'
+            : 'bg-card text-foreground border-border/60 hover:border-secondary/40 hover:shadow-md active:scale-[0.97]'
         }`}
       >
         <SlidersHorizontal className="w-4 h-4" />
@@ -138,8 +138,8 @@ export function AdvancedFilterPanel({ filters, onApply, priceSuffix = 'EGP' }: P
 
       {open && (
         <>
-          <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className={`fixed inset-y-0 ${language === 'ar' ? 'left-0 animate-in slide-in-from-left' : 'right-0 animate-in slide-in-from-right'} duration-300 z-50 w-full max-w-sm bg-card shadow-2xl flex flex-col`} role="dialog" aria-modal="true" aria-label={t('filters.title')}>
+          <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setOpen(false)} aria-hidden="true" />
+          <div className={`fixed inset-y-0 ${language === 'ar' ? 'left-0 animate-in slide-in-from-left' : 'right-0 animate-in slide-in-from-right'} duration-300 ease-out z-50 w-full max-w-sm bg-card shadow-2xl shadow-black/10 flex flex-col`} role="dialog" aria-modal="true" aria-label={t('filters.title')}>
             <div className="flex items-center justify-between p-6 border-b border-border">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-5 h-5 text-secondary" />
@@ -305,10 +305,10 @@ export function AdvancedFilterPanel({ filters, onApply, priceSuffix = 'EGP' }: P
             </div>
 
             <div className="p-4 sm:p-6 border-t border-border flex gap-3">
-              <button onClick={resetAndClose} className="flex-1 min-h-[44px] py-3 rounded-xl border border-border font-semibold text-sm hover:bg-muted/60 transition-colors active:scale-[0.98]">
+              <button onClick={resetAndClose} className="flex-1 min-h-[44px] py-3 rounded-xl border border-border font-semibold text-sm hover:bg-muted/60 transition-all duration-200 active:scale-[0.97]">
                 {t('filters.reset')}
               </button>
-              <button onClick={applyAndClose} className="flex-1 min-h-[44px] py-3 rounded-xl bg-secondary text-white font-semibold text-sm hover:bg-secondary/90 shadow-md transition-all active:scale-[0.98]">
+              <button onClick={applyAndClose} className="flex-1 min-h-[44px] py-3 rounded-xl bg-secondary text-white font-semibold text-sm hover:bg-secondary/90 shadow-lg shadow-secondary/20 transition-all duration-200 active:scale-[0.97]">
                 {t('filters.apply')}
               </button>
             </div>

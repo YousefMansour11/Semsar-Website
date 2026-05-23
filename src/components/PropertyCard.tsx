@@ -36,7 +36,7 @@ export const PropertyCard = memo(function PropertyCard({ property }: PropertyCar
   return (
     <Link
       to={localizedPath(`/properties/${property.slug}`, language)}
-      className="group block bg-card rounded-2xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 active:scale-[0.98]"
+      className="group block bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-border hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 active:scale-[0.98]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <PremiumImage
@@ -92,7 +92,7 @@ export const PropertyCard = memo(function PropertyCard({ property }: PropertyCar
           </div>
         </div>
 
-        <span className="block w-full text-center py-4 bg-navy text-white rounded-xl text-sm font-semibold shadow-md shadow-navy/20 group-hover:bg-navy-light group-hover:shadow-lg group-hover:shadow-navy/30 transition-all min-h-[48px] flex items-center justify-center">
+        <span className="block w-full text-center py-4 bg-navy text-white rounded-xl text-sm font-semibold shadow-lg shadow-navy/15 group-hover:bg-navy-light group-hover:shadow-xl group-hover:shadow-navy/25 transition-all duration-200 min-h-[48px] flex items-center justify-center">
           {t('cta.viewDetails')}
         </span>
       </div>

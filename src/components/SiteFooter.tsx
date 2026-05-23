@@ -40,10 +40,10 @@ export function SiteFooter() {
 
   return (
     <footer id="site-footer" className="bg-navy text-white" dir={dir}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-8 sm:pt-12 lg:pt-16 pb-8 sm:pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-10 sm:pt-12 lg:pt-16 pb-8 sm:pb-10">
 
-        {/* Main grid: mobile=2col, tablet=3col, desktop=4col */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 sm:gap-x-8 lg:gap-x-12 gap-y-8 sm:gap-y-10 mb-8 sm:mb-12">
+        {/* Main grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 sm:gap-x-8 lg:gap-x-12 gap-y-10 sm:gap-y-10 mb-10 sm:mb-12">
 
           {/* Brand — full width on mobile/tablet, 1col on desktop */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
@@ -150,8 +150,8 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-5 sm:pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/30 text-[11px] sm:text-xs">{t('footer.rights')}</p>
+        <div className="pt-6 sm:pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-white/30 text-[11px] sm:text-xs tracking-wide">{t('footer.rights')}</p>
         </div>
       </div>
     </footer>

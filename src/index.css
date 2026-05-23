@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --background: 210 20% 98%;
     --foreground: 216 60% 10%;
@@ -127,24 +131,24 @@
   min-width: 0;
 }
 
-/* Hero stagger animation — replaces framer-motion */
+/* Hero stagger animation */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(32px); }
+  from { opacity: 0; transform: translateY(28px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .fade-children > * {
   opacity: 0;
-  animation: fadeUp 0.6s ease-out forwards;
+  animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .fade-children > *:nth-child(1) { animation-delay: 0s; }
-.fade-children > *:nth-child(2) { animation-delay: 0.12s; }
-.fade-children > *:nth-child(3) { animation-delay: 0.24s; }
-.fade-children > *:nth-child(4) { animation-delay: 0.36s; }
+.fade-children > *:nth-child(2) { animation-delay: 0.15s; }
+.fade-children > *:nth-child(3) { animation-delay: 0.3s; }
+.fade-children > *:nth-child(4) { animation-delay: 0.45s; }
 
-/* Scroll reveal — replaces framer-motion whileInView */
+/* Scroll reveal */
 @keyframes fadeUpIn {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -152,15 +156,15 @@
   opacity: 0;
 }
 .reveal-on-scroll.visible {
-  animation: fadeUpIn 0.5s ease-out forwards;
+  animation: fadeUpIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .reveal-stagger > .reveal-item {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(16px);
 }
 .reveal-stagger.visible > .reveal-item {
-  animation: fadeUpIn 0.5s ease-out forwards;
+  animation: fadeUpIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .reveal-stagger.visible > .reveal-item:nth-child(1) { animation-delay: 0s; }
 .reveal-stagger.visible > .reveal-item:nth-child(2) { animation-delay: 0.1s; }
@@ -168,7 +172,29 @@
 .reveal-stagger.visible > .reveal-item:nth-child(4) { animation-delay: 0.3s; }
 .reveal-stagger.visible > .reveal-item:nth-child(5) { animation-delay: 0.4s; }
 
+/* Page fade-in on route change */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Skeleton pulse — softer */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.25; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
   .fade-children > *,
   .reveal-on-scroll,
   .reveal-stagger > .reveal-item {

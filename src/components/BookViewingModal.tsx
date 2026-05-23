@@ -83,9 +83,9 @@ export function BookViewingModal({ isOpen, onClose, propertyId = null, unitId = 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={t('modal.title')}>
-      <div className="absolute inset-0 bg-navy/80 backdrop-blur-sm" onClick={handleClose} aria-hidden="true" />
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-label={t('modal.title')}>
+      <div className="absolute inset-0 bg-navy/70 backdrop-blur-md" onClick={handleClose} aria-hidden="true" />
+      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl shadow-black/10 overflow-hidden animate-in zoom-in-95 duration-200">
         <button onClick={handleClose} aria-label={t('modal.close')} className={`absolute top-4 ${language === 'ar' ? 'left-4' : 'right-4'} text-muted-foreground hover:text-foreground p-2 rounded-full hover:bg-muted z-10`} autoFocus>
           <X className="w-5 h-5" />
         </button>

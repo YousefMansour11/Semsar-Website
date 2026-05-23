@@ -166,7 +166,7 @@ const Index = () => {
 
         <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 sm:mt-20">
           <div className="space-y-4 sm:space-y-6 fade-children">
-            <span className="inline-block py-1.5 px-5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-bold tracking-[0.2em] uppercase">
+            <span className="inline-block py-1.5 px-5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-bold tracking-[0.25em] uppercase">
               {t('hero.badge')}
             </span>
 
@@ -178,26 +178,26 @@ const Index = () => {
               {t('hero.subtitle')}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2">
-              <button onClick={() => scrollTo('for-sale')} className="w-full sm:w-auto px-9 py-4 bg-gold text-navy rounded-full font-bold shadow-xl shadow-amber-900/20 hover:bg-gold-dark hover:text-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 text-sm tracking-wide">
-                {t('hero.explore')}
-              </button>
-              <button onClick={() => scrollTo('projects')} className="w-full sm:w-auto px-9 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full font-bold hover:bg-white/20 transition-all duration-300 text-sm tracking-wide">
-                {t('hero.projects')}
-              </button>
-            </div>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2">
+                <button onClick={() => scrollTo('for-sale')} className="w-full sm:w-auto px-9 py-4 bg-gold text-navy rounded-full font-bold shadow-xl shadow-amber-900/20 hover:bg-gold-dark hover:text-white hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 text-sm tracking-wide active:scale-[0.97]">
+                  {t('hero.explore')}
+                </button>
+                <button onClick={() => scrollTo('projects')} className="w-full sm:w-auto px-9 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full font-bold hover:bg-white/20 hover:-translate-y-0.5 transition-all duration-300 text-sm tracking-wide active:scale-[0.97]">
+                  {t('hero.projects')}
+                </button>
+              </div>
           </div>
         </div>
       </section>
 
       {/* ── Stats ──────────────────────────────────── */}
-      <section className="bg-navy py-8 sm:py-12">
+      <section className="bg-navy py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="reveal-stagger grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
+          <div className="reveal-stagger grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 text-center">
             {stats.map(({ value, labelKey }) => (
-              <div key={labelKey} className="reveal-item space-y-1">
+              <div key={labelKey} className="reveal-item space-y-1.5">
                 <div className="text-2xl sm:text-4xl font-display font-bold text-gold">{value}</div>
-                <div className="text-white/60 text-xs sm:text-sm font-medium">{t(labelKey)}</div>
+                <div className="text-white/50 text-xs sm:text-sm font-medium tracking-wide">{t(labelKey)}</div>
               </div>
             ))}
           </div>

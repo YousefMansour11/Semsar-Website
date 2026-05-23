@@ -52,7 +52,7 @@ export function ProjectsSlider({ projects }: { projects: Project[] }) {
           onClick={scrollPrev}
           disabled={!prevEnabled}
           aria-label={t('projects.slider.prev')}
-          className={`w-12 h-12 rounded-full bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-foreground disabled:opacity-0 transition-opacity duration-300 pointer-events-auto hover:bg-secondary hover:text-white ${language === 'ar' ? 'order-2' : ''}`}
+          className={`w-11 h-11 rounded-full bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-foreground disabled:opacity-0 transition-all duration-200 pointer-events-auto hover:bg-secondary hover:text-white hover:shadow-xl active:scale-[0.95] ${language === 'ar' ? 'order-2' : ''}`}
         >
           {language === 'ar' ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
         </button>
@@ -60,7 +60,7 @@ export function ProjectsSlider({ projects }: { projects: Project[] }) {
           onClick={scrollNext}
           disabled={!nextEnabled}
           aria-label={t('projects.slider.next')}
-          className={`w-12 h-12 rounded-full bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-foreground disabled:opacity-0 transition-opacity duration-300 pointer-events-auto hover:bg-secondary hover:text-white ${language === 'ar' ? 'order-1' : ''}`}
+          className={`w-11 h-11 rounded-full bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-foreground disabled:opacity-0 transition-all duration-200 pointer-events-auto hover:bg-secondary hover:text-white hover:shadow-xl active:scale-[0.95] ${language === 'ar' ? 'order-1' : ''}`}
         >
           {language === 'ar' ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />}
         </button>

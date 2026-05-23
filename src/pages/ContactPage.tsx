@@ -127,7 +127,7 @@ export default function ContactPage() {
                 {errorMsg && (
                   <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2" role="alert">{errorMsg}</p>
                 )}
-                <button type="submit" disabled={status === 'submitting'} className="w-full min-h-[48px] py-3 bg-gold text-navy rounded-xl font-bold shadow-lg shadow-amber-900/20 hover:bg-gold-dark hover:text-white hover:shadow-xl transition-all disabled:opacity-70 active:scale-[0.98]">
+                <button type="submit" disabled={status === 'submitting'} className="w-full min-h-[48px] py-3 bg-gold text-navy rounded-xl font-bold shadow-lg shadow-amber-900/20 hover:bg-gold-dark hover:text-white hover:shadow-xl transition-all duration-200 disabled:opacity-70 active:scale-[0.97]">
                   {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : t('contact.formSubmit')}
                 </button>
               </form>

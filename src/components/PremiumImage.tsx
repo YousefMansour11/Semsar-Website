@@ -75,7 +75,7 @@ export function PremiumImage({
           src={blurSrc}
           alt=""
           aria-hidden="true"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-0' : 'opacity-100'}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${loaded ? 'opacity-0' : 'opacity-100'}`}
         />
       )}
       <img
@@ -89,7 +89,7 @@ export function PremiumImage({
         sizes={srcSet ? (sizes || DEFAULT_SIZES) : undefined}
         onLoad={handleLoad}
         onError={handleError}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
+        className={`w-full h-full object-cover transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
         style={{ willChange: loaded ? 'auto' : 'opacity' }}
       />
       {!loaded && !error && (

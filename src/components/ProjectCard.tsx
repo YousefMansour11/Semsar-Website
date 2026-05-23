@@ -29,7 +29,7 @@ export function ProjectCard({ project }: { project: Project }) {
           sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 25vw"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/40 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+      <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/30 to-transparent transition-opacity duration-500 group-hover:opacity-95" />
 
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end">
         <div className="flex items-center gap-2 text-white/80 mb-2 text-sm font-medium">

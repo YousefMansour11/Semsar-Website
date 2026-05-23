@@ -29,35 +29,21 @@ export default function AboutPage() {
           {t('about.paragraph')}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-              <MapPin aria-hidden="true" className="w-6 h-6" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-12">
+          {[
+            { icon: <MapPin className="w-6 h-6" />, bg: 'bg-primary/10', color: 'text-primary', title: t('general.whyUs.expertTitle'), desc: t('general.whyUs.expertDesc') },
+            { icon: <TrendingUp className="w-6 h-6" />, bg: 'bg-gold/10', color: 'text-amber-600', title: t('general.whyUs.roiTitle'), desc: t('general.whyUs.roiDesc') },
+            { icon: <Users className="w-6 h-6" />, bg: 'bg-emerald-500/10', color: 'text-emerald-600', title: t('general.whyUs.supportTitle'), desc: t('general.whyUs.supportDesc') },
+            { icon: <Shield className="w-6 h-6" />, bg: 'bg-secondary/10', color: 'text-secondary', title: t('general.whyUs.secureTitle'), desc: t('general.whyUs.secureDesc') },
+          ].map((item, i) => (
+            <div key={i} className="bg-card border border-border/60 rounded-2xl p-6 space-y-3 transition-all duration-200 hover:border-border hover:shadow-md">
+              <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center ${item.color}`}>
+                {item.icon}
+              </div>
+              <h2 className="font-bold text-lg">{item.title}</h2>
+              <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
             </div>
-            <h2 className="font-bold text-lg">{t('general.whyUs.expertTitle')}</h2>
-            <p className="text-muted-foreground text-sm">{t('general.whyUs.expertDesc')}</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-amber-600">
-              <TrendingUp aria-hidden="true" className="w-6 h-6" />
-            </div>
-            <h2 className="font-bold text-lg">{t('general.whyUs.roiTitle')}</h2>
-            <p className="text-muted-foreground text-sm">{t('general.whyUs.roiDesc')}</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
-              <Users aria-hidden="true" className="w-6 h-6" />
-            </div>
-            <h2 className="font-bold text-lg">{t('general.whyUs.supportTitle')}</h2>
-            <p className="text-muted-foreground text-sm">{t('general.whyUs.supportDesc')}</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
-              <Shield aria-hidden="true" className="w-6 h-6" />
-            </div>
-            <h2 className="font-bold text-lg">{t('general.whyUs.secureTitle')}</h2>
-            <p className="text-muted-foreground text-sm">{t('general.whyUs.secureDesc')}</p>
-          </div>
+          ))}
         </div>
       </div>
 

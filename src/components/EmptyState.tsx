@@ -51,20 +51,20 @@ export function EmptyState({
   };
 
   return (
-    <div className={`bg-card border border-border rounded-2xl p-8 sm:p-12 text-center shadow-sm ${className}`}>
-      <div className="w-16 h-16 rounded-2xl bg-muted/50 flex items-center justify-center mx-auto mb-5">
-        <Icon className="w-8 h-8 text-muted-foreground/50" />
+    <div className={`bg-card border border-border/60 rounded-2xl p-8 sm:p-12 text-center shadow-sm ${className}`}>
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center mx-auto mb-5 ring-1 ring-border/30">
+        <Icon className="w-8 h-8 text-muted-foreground/40" />
       </div>
-      <h3 className="text-xl font-semibold mb-2">
+      <h3 className="text-lg font-semibold mb-2 text-foreground">
         {title || defaultTitle[icon]}
       </h3>
-      <p className="text-muted-foreground max-w-sm mx-auto">
+      <p className="text-sm text-muted-foreground max-w-xs mx-auto leading-relaxed">
         {message || defaultMessage[icon]}
       </p>
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-secondary text-white rounded-xl font-semibold hover:bg-secondary/90 transition-all shadow-md shadow-secondary/20 text-sm min-h-[44px]"
+          className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-secondary text-white rounded-xl font-semibold hover:bg-secondary/90 transition-all duration-200 shadow-lg shadow-secondary/20 text-sm min-h-[44px] active:scale-[0.97]"
         >
           {actionLabel}
         </button>
