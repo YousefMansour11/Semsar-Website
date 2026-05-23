@@ -22,12 +22,6 @@ window.addEventListener("unhandledrejection", (event) => {
   Sentry.captureException(event.reason);
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
-
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("Root element #root not found");
 createRoot(rootEl).render(<App />);
