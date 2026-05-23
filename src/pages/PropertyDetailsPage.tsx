@@ -79,7 +79,7 @@ export default function PropertyDetailsPage() {
           '@type': 'RealEstateListing',
           name: title,
           description: description?.slice(0, 200),
-          url: canonicalUrl,
+          url: `${origin}${localizedPath(propPath, language)}`,
           image: gallery[0],
           offers: { '@type': 'Offer', price: displayPrice, priceCurrency: 'EGP' },
         })}
