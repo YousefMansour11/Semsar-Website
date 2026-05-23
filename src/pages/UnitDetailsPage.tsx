@@ -10,6 +10,7 @@ import SeoHelmet from '../components/SeoHelmet';
 import { useLanguage } from '../i18n/LanguageContext';
 import { MapPin, Square, Check, Eye, MessageCircle, Calendar, PhoneCall, ArrowLeft, ArrowRight, Bed, Bath, ArrowUpDown, Hash, Building, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
 import { PremiumImage } from '../components/PremiumImage';
+import { optimizeCloudinaryUrl } from '../lib/utils';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
 
@@ -64,6 +65,7 @@ export default function UnitDetailsPage() {
         description={description?.slice(0, 160)}
         canonical={`${origin}/units/${unit.slug}`}
         image={gallery[0]}
+        preload={gallery[0] ? [{ href: optimizeCloudinaryUrl(gallery[0], { width: 1600, quality: 'best', crop: 'fill', gravity: 'center', sharpen: 'soft' }), as: 'image' }] : undefined}
         jsonLd={JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'RealEstateListing',

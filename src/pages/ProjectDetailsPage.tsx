@@ -1,20 +1,27 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProject } from '../hooks/use-properties';
+import { useSettings, whatsappLink } from '../hooks/use-settings';
 import { Header } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
 import { PropertyCard } from '../components/PropertyCard';
+import { MobileStickyBar } from '../components/MobileStickyBar';
 import SeoHelmet from '../components/SeoHelmet';
 import { MapPin, Check, ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { PremiumImage } from '../components/PremiumImage';
+import { optimizeCloudinaryUrl } from '../lib/utils';
 import { ProjectDetailSkeleton } from '../components/Skeletons';
 
 export default function ProjectDetailsPage() {
   const { slug } = useParams();
   const { data: project, isLoading } = useProject(slug || '');
+  const { data: settings } = useSettings();
   const { t, language, fmtNum } = useLanguage();
   const [descExpanded, setDescExpanded] = useState(false);
+  const whatsappNumber = settings?.whatsappNumber || '+201558730895';
+  const phoneNumber = settings?.phoneNumber || whatsappNumber;
+  const heroImg = project?.images?.[0] || project?.image || '';
 
   if (isLoading) {
     return <ProjectDetailSkeleton />;
@@ -41,6 +48,7 @@ export default function ProjectDetailsPage() {
         description={description?.slice(0, 160)}
         canonical={`${origin}/projects/${project.slug}`}
         image={project.image}
+        preload={heroImg ? [{ href: optimizeCloudinaryUrl(heroImg, { width: 1600, quality: 'best', crop: 'fill', gravity: 'center', sharpen: 'soft' }), as: 'image' }] : undefined}
         jsonLd={JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'RealEstateProject',
@@ -154,6 +162,11 @@ export default function ProjectDetailsPage() {
         </div>
       </section>
 
+      <MobileStickyBar
+        whatsappHref={whatsappLink(whatsappNumber, `Hello, I'm interested in project ${name}`)}
+        phoneHref={`tel:${phoneNumber}`}
+        primaryAction={{ label: t('projects.viewUnits'), onClick: () => document.getElementById('units')?.scrollIntoView({ behavior: 'smooth' }) }}
+      />
       <SiteFooter />
     </div>
   );

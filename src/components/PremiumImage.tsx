@@ -41,7 +41,7 @@ export function PremiumImage({
   const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const imgSrc = error ? fallback : optimizeCloudinaryUrl(src, { width: width || 800, height, quality: options?.quality || 'good', crop: options?.crop || 'fill', gravity: options?.gravity || 'auto', sharpen: options?.sharpen });
+  const imgSrc = error ? fallback : optimizeCloudinaryUrl(src, { width: width || 800, height, quality: options?.quality || 'best', crop: options?.crop || 'fill', gravity: options?.gravity || 'auto', sharpen: options?.sharpen });
   const blurSrc = !error ? getBlurDataUrl(src) : '';
   const srcSet = !error && srcsetWidths.length > 0 ? buildSrcSet(src, srcsetWidths, undefined, { gravity: options?.gravity, sharpen: options?.sharpen }) : '';
   const loadingAttr = priority ? 'eager' as const : loading;

@@ -10,6 +10,7 @@ import SeoHelmet from '../components/SeoHelmet';
 import { useLanguage } from '../i18n/LanguageContext';
 import { MapPin, Bed, Bath, Square, Check, Eye, MessageCircle, Calendar, PhoneCall, ArrowLeft, ArrowRight, ArrowUpDown, Hash, Building, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
 import { PremiumImage } from '../components/PremiumImage';
+import { optimizeCloudinaryUrl } from '../lib/utils';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
 
@@ -69,6 +70,7 @@ export default function PropertyDetailsPage() {
         description={description?.slice(0, 160)}
         canonical={canonicalUrl}
         image={gallery[0]}
+        preload={gallery[0] ? [{ href: optimizeCloudinaryUrl(gallery[0], { width: 1600, quality: 'best', crop: 'fill', gravity: 'center', sharpen: 'soft' }), as: 'image' }] : undefined}
         alternates={[
           { hrefLang: 'en', href: canonicalUrl },
           { hrefLang: 'ar', href: canonicalUrl },

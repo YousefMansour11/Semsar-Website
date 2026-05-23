@@ -10,6 +10,7 @@ interface SeoHelmetProps {
   alternates?: { hrefLang: string; href: string }[];
   jsonLd?: string;
   noindex?: boolean;
+  preload?: { href: string; as: string }[];
 }
 
 const SITE_NAME = "Semsar";
@@ -23,6 +24,7 @@ export default function SeoHelmet({
   alternates,
   jsonLd,
   noindex,
+  preload,
 }: SeoHelmetProps) {
   const { localeStr } = useLanguage();
   const ogLocale = localeStr === 'ar-EG' ? 'ar_EG' : 'en_US';
@@ -48,6 +50,9 @@ export default function SeoHelmet({
 
       {canonical && <link rel="canonical" href={canonical} />}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
+      {preload?.map((p, i) => (
+        <link key={i} rel="preload" href={p.href} as={p.as} />
+      ))}
 
       {alternates?.map((alt) => (
         <link key={alt.hrefLang} rel="alternate" hrefLang={alt.hrefLang} href={alt.href} />
