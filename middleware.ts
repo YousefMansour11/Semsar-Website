@@ -1,6 +1,7 @@
 const CRAWLERS = /bot|crawler|spider|facebookexternalhit|twitterbot|linkedinbot|embedly|slack|whatsapp|telegram|pinterest|discord/i;
 
 const API_BASE = 'https://semsar-hub.runasp.net/api';
+const ORIGIN = 'https://semsar-web-alpha.vercel.app';
 
 async function fetchJSON(url: string) {
   try {
@@ -39,7 +40,15 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function middleware(request: Request) {
+const NOT_FOUND_HTML = (path: string, lang: string) => buildHtml(
+  lang === 'ar' ? 'الصفحة غير موجودة - سمسار' : 'Page Not Found - Semsar',
+  lang === 'ar' ? 'الصفحة التي تبحث عنها غير موجودة' : 'The page you are looking for does not exist.',
+  `${ORIGIN}/og-image.svg`,
+  `${ORIGIN}${path}`,
+  lang
+);
+
+export default async function middleware(request: Request): Promise<Response | void> {
   const ua = request.headers.get('user-agent') || '';
   if (!CRAWLERS.test(ua)) return;
 
@@ -48,44 +57,46 @@ export default async function middleware(request: Request) {
   const lang = path.startsWith('/ar') ? 'ar' : 'en';
   const cleanPath = path.replace(/^\/(en|ar)\/?/, '/').replace(/\/$/, '') || '/';
 
-  const origin = `https://semsar-web-alpha.vercel.app`;
+  const notFound = () => new Response(NOT_FOUND_HTML(path, lang), {
+    status: 404,
+    headers: { 'content-type': 'text/html;charset=utf-8' },
+  });
+
+  const render = (title: string, description: string, image: string) =>
+    new Response(buildHtml(title, description, image, `${ORIGIN}${path}`, lang), {
+      headers: { 'content-type': 'text/html;charset=utf-8' },
+    });
 
   if (cleanPath.startsWith('/properties/')) {
     const slug = cleanPath.replace('/properties/', '');
     const data = await fetchJSON(`${API_BASE}/Properties/slug/${slug}`);
-    if (data) {
-      const title = lang === 'ar' ? data.titleAr : data.titleEn;
-      const desc = (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || title;
-      const image = data.images?.[0] || data.image || `${origin}/og-image.svg`;
-      return new Response(buildHtml(title, desc, image, `${origin}${path}`, lang), {
-        headers: { 'content-type': 'text/html;charset=utf-8' },
-      });
-    }
+    if (!data) return notFound();
+    return render(
+      lang === 'ar' ? data.titleAr : data.titleEn,
+      (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.titleEn,
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+    );
   }
 
   if (cleanPath.startsWith('/projects/')) {
     const slug = cleanPath.replace('/projects/', '');
     const data = await fetchJSON(`${API_BASE}/Projects/slug/${slug}`);
-    if (data) {
-      const title = lang === 'ar' ? data.titleAr : data.titleEn;
-      const desc = (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || title;
-      const image = data.images?.[0] || data.image || `${origin}/og-image.svg`;
-      return new Response(buildHtml(title, desc, image, `${origin}${path}`, lang), {
-        headers: { 'content-type': 'text/html;charset=utf-8' },
-      });
-    }
+    if (!data) return notFound();
+    return render(
+      lang === 'ar' ? data.nameAr : data.nameEn,
+      (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.nameEn,
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+    );
   }
 
   if (cleanPath.startsWith('/units/')) {
     const slug = cleanPath.replace('/units/', '');
     const data = await fetchJSON(`${API_BASE}/Properties/slug/${slug}`);
-    if (data) {
-      const title = lang === 'ar' ? data.titleAr : data.titleEn;
-      const desc = (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || title;
-      const image = data.images?.[0] || data.image || `${origin}/og-image.svg`;
-      return new Response(buildHtml(title, desc, image, `${origin}${path}`, lang), {
-        headers: { 'content-type': 'text/html;charset=utf-8' },
-      });
-    }
+    if (!data) return notFound();
+    return render(
+      lang === 'ar' ? data.titleAr : data.titleEn,
+      (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.titleEn,
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+    );
   }
 }
