@@ -55,6 +55,9 @@ export function PremiumImage({
   const handleLoad = () => setLoaded(true);
   const handleError = () => { setError(true); setLoaded(true); };
 
+  const hasPositionClass = /\b(absolute|relative|fixed|sticky)\b/.test(className);
+  const wrapperClassName = hasPositionClass ? `overflow-hidden ${className}` : `relative overflow-hidden ${className}`;
+
   const containerStyle: React.CSSProperties = {};
   if (aspectRatio) {
     containerStyle.aspectRatio = aspectRatio;
@@ -64,7 +67,7 @@ export function PremiumImage({
 
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
+      className={wrapperClassName}
       style={containerStyle}
     >
       {!error && (
