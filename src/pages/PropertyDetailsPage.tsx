@@ -9,9 +9,10 @@ import { BookViewingModal } from '../components/BookViewingModal';
 import SeoHelmet from '../components/SeoHelmet';
 import { useLanguage } from '../i18n/LanguageContext';
 import { localizedPath, getSiteUrl } from '../lib/paths';
-import { MapPin, Bed, Bath, Square, Check, Eye, MessageCircle, Calendar, PhoneCall, ArrowLeft, ArrowRight, ArrowUpDown, Hash, Building, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, Bed, Bath, Square, Check, Eye, MessageCircle, Calendar, PhoneCall, ArrowLeft, ArrowRight, ArrowUpDown, Hash, Building, CreditCard, Wallet } from 'lucide-react';
 import { PremiumImage } from '../components/PremiumImage';
 import { ImageLightbox } from '../components/ImageLightbox';
+import { ReadMore } from '../components/ReadMore';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
 
 export default function PropertyDetailsPage() {
@@ -24,7 +25,6 @@ export default function PropertyDetailsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [descExpanded, setDescExpanded] = useState(false);
   const backSection = property?.listingType === 'rent' ? 'for-rent' : 'for-sale';
 
   if (isLoading) {
@@ -243,12 +243,7 @@ export default function PropertyDetailsPage() {
             <div>
               <h2 className="font-display text-xl sm:text-2xl font-bold mb-2">{t('property.description')}</h2>
               <div className="w-10 h-1 bg-gold rounded-full mb-5" />
-              <p className="text-muted-foreground text-base sm:text-lg leading-relaxed whitespace-pre-wrap break-words max-w-prose">{descExpanded ? description : `${description?.slice(0, 250)}${description && description.length > 250 ? '...' : ''}`}</p>
-              {description && description.length > 250 && (
-                <button onClick={() => setDescExpanded(!descExpanded)} className="flex items-center gap-1 text-sm text-gold mt-2 hover:underline">
-                  {descExpanded ? <>Show less <ChevronUp className="w-4 h-4" /></> : <>Show more <ChevronDown className="w-4 h-4" /></>}
-                </button>
-              )}
+              <ReadMore text={description || ''} />
             </div>
 
             {/* Installment Plans */}

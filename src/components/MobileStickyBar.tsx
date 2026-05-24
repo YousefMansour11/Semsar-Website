@@ -4,10 +4,10 @@ import { useLanguage } from '../i18n/LanguageContext';
 interface MobileStickyBarProps {
   whatsappHref: string;
   phoneHref: string;
-  primaryAction: {
+  primaryAction?: {
     label: string;
     onClick: () => void;
-  };
+  } | null;
 }
 
 export function MobileStickyBar({ whatsappHref, phoneHref, primaryAction }: MobileStickyBarProps) {
@@ -33,13 +33,15 @@ export function MobileStickyBar({ whatsappHref, phoneHref, primaryAction }: Mobi
             <PhoneCall className="w-4.5 h-4.5 shrink-0" />
             <span className="truncate">Call</span>
           </a>
-          <button
-            onClick={primaryAction.onClick}
-            className="flex-1 flex items-center justify-center gap-1.5 h-12 rounded-xl bg-navy text-white font-semibold text-xs shadow-md shadow-navy/20 transition-all duration-200 hover:bg-navy-light hover:shadow-lg active:scale-[0.97]"
-          >
-            <Calendar className="w-4.5 h-4.5 shrink-0" />
-            <span className="truncate">{primaryAction.label}</span>
-          </button>
+          {primaryAction && (
+            <button
+              onClick={primaryAction.onClick}
+              className="flex-1 flex items-center justify-center gap-1.5 h-12 rounded-xl bg-navy text-white font-semibold text-xs shadow-md shadow-navy/20 transition-all duration-200 hover:bg-navy-light hover:shadow-lg active:scale-[0.97]"
+            >
+              <Calendar className="w-4.5 h-4.5 shrink-0" />
+              <span className="truncate">{primaryAction.label}</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
