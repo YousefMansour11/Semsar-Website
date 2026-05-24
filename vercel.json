@@ -1,17 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://semsar-web-alpha.vercel.app/$1",
-      "has": [
-        {
-          "type": "host",
-          "value": "semsar-alpha.vercel.app"
-        }
-      ],
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
