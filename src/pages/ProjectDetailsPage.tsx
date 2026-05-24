@@ -3,6 +3,7 @@ import { useProject } from '../hooks/use-properties';
 import { useSettings, whatsappLink } from '../hooks/use-settings';
 import { Header } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
+import { PropertyCard } from '../components/PropertyCard';
 import { MobileStickyBar } from '../components/MobileStickyBar';
 import { ReadMore } from '../components/ReadMore';
 import SeoHelmet from '../components/SeoHelmet';
@@ -16,7 +17,7 @@ export default function ProjectDetailsPage() {
   const { slug } = useParams();
   const { data: project, isLoading } = useProject(slug || '');
   const { data: settings } = useSettings();
-  const { t, language } = useLanguage();
+  const { t, language, fmtNum } = useLanguage();
   const whatsappNumber = settings?.whatsappNumber || '+201558730895';
   const phoneNumber = settings?.phoneNumber || whatsappNumber;
   const heroImg = project?.images?.[0] || project?.image || '/placeholder.svg';
@@ -134,12 +135,26 @@ export default function ProjectDetailsPage() {
                     <dt className="text-muted-foreground text-sm">{t('projects.status')}</dt>
                     <dd className="font-semibold text-sm text-emerald-600">{t('projects.nowSelling')}</dd>
                   </div>
+                  <div className="flex justify-between items-center">
+                    <dt className="text-muted-foreground text-sm">{t('projects.availableUnits')}</dt>
+                    <dd className="font-semibold text-sm">{fmtNum(project.unitCount ?? project.units?.length ?? 0)}</dd>
+                  </div>
                 </dl>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <section id="units" className="bg-muted/30 py-12 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display text-3xl font-bold mb-2">{t('projects.nowSelling')}</h2>
+          <div className="w-16 h-1.5 bg-gold rounded-full mb-10" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {project.units.map(unit => <PropertyCard key={unit.id} property={unit} />)}
+          </div>
+        </div>
+      </section>
 
       <MobileStickyBar
         whatsappHref={whatsappLink(whatsappNumber, `Hello, I'm interested in project ${name}`)}
