@@ -32,7 +32,7 @@ function buildHtml(title: string, description: string, image: string, url: strin
 <meta name="twitter:image" content="${image}" />
 <link rel="canonical" href="${url}" />
 </head>
-<body><script>window.location.href="${url}";</script></body>
+<body><meta http-equiv="refresh" content="0;url=${url}" /></body>
 </html>`;
 }
 
