@@ -1,10 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useProject } from '../hooks/use-properties';
-import { useSettings, whatsappLink } from '../hooks/use-settings';
 import { Header } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
 import { PropertyCard } from '../components/PropertyCard';
-import { MobileStickyBar } from '../components/MobileStickyBar';
 import { ReadMore } from '../components/ReadMore';
 import SeoHelmet from '../components/SeoHelmet';
 import { MapPin, Check, ArrowLeft, ArrowRight } from 'lucide-react';
@@ -16,10 +14,7 @@ import { ProjectDetailSkeleton } from '../components/Skeletons';
 export default function ProjectDetailsPage() {
   const { slug } = useParams();
   const { data: project, isLoading } = useProject(slug || '');
-  const { data: settings } = useSettings();
   const { t, language, fmtNum } = useLanguage();
-  const whatsappNumber = settings?.whatsappNumber || '+201558730895';
-  const phoneNumber = settings?.phoneNumber || whatsappNumber;
   const heroImg = project?.images?.[0] || project?.image || '/placeholder.svg';
 
   if (isLoading) {
@@ -156,10 +151,6 @@ export default function ProjectDetailsPage() {
         </div>
       </section>
 
-      <MobileStickyBar
-        whatsappHref={whatsappLink(whatsappNumber, `Hello, I'm interested in project ${name}`)}
-        phoneHref={`tel:${phoneNumber}`}
-      />
       <SiteFooter />
     </div>
   );
