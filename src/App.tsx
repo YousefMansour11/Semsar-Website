@@ -10,6 +10,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import * as Sentry from "@sentry/react";
 import { initTracker } from "./lib/tracker";
 import { TrackerProvider } from "./components/TrackerProvider";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 const Index = lazy(() => import("./pages/Index"));
 const PropertyDetailsPage = lazy(() => import("./pages/PropertyDetailsPage"));
@@ -58,6 +60,8 @@ const App = () => (
       <TooltipProvider>
         <LanguageProvider>
           <TrackerInit />
+          <SpeedInsights />
+          <Analytics />
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <TrackerProvider>
               <ScrollManager>
