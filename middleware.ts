@@ -43,7 +43,7 @@ export const config = {
 const NOT_FOUND_HTML = (path: string, lang: string) => buildHtml(
   lang === 'ar' ? 'الصفحة غير موجودة - سمسار' : 'Page Not Found - Semsar',
   lang === 'ar' ? 'الصفحة التي تبحث عنها غير موجودة' : 'The page you are looking for does not exist.',
-  `${ORIGIN}/og-image.svg`,
+  `${ORIGIN}/og-image.png`,
   `${ORIGIN}${path}`,
   lang
 );
@@ -74,7 +74,7 @@ export default async function middleware(request: Request): Promise<Response | v
     return render(
       lang === 'ar' ? data.titleAr : data.titleEn,
       (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.titleEn,
-      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.png`
     );
   }
 
@@ -85,7 +85,7 @@ export default async function middleware(request: Request): Promise<Response | v
     return render(
       lang === 'ar' ? data.nameAr : data.nameEn,
       (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.nameEn,
-      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.png`
     );
   }
 
@@ -96,7 +96,7 @@ export default async function middleware(request: Request): Promise<Response | v
     return render(
       lang === 'ar' ? data.titleAr : data.titleEn,
       (lang === 'ar' ? data.descriptionAr : data.descriptionEn)?.slice(0, 160) || data.titleEn,
-      data.images?.[0] || data.image || `${ORIGIN}/og-image.svg`
+      data.images?.[0] || data.image || `${ORIGIN}/og-image.png`
     );
   }
 }
