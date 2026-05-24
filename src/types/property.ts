@@ -32,6 +32,13 @@ export interface InstallmentPlan {
   isDeleted?: boolean;
 }
 
+export interface VideoItem {
+  id: number;
+  url: string;
+  publicId: string;
+  thumbnailUrl?: string;
+}
+
 export interface Property {
   // Core
   id: string;
@@ -87,6 +94,7 @@ export interface Property {
   // Media
   image: string;          // primary thumbnail (= images[0])
   images: string[];       // gallery (backend `images[]`)
+  videos?: VideoItem[];   // gallery (backend `videos[]`)
 
   // Relations
   projectId: string | null;
@@ -118,6 +126,7 @@ export interface Project {
   developer?: string;
   image: string;
   images: string[];
+  videos?: VideoItem[];
   highlights: string[];
   highlightsAr?: string[];
   unitCount?: number;

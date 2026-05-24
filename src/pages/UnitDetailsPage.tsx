@@ -14,6 +14,7 @@ import { PremiumImage } from '../components/PremiumImage';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { ReadMore } from '../components/ReadMore';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
+import { VideoGallery } from '../components/videos/VideoGallery';
 
 export default function UnitDetailsPage() {
   const { slug } = useParams();
@@ -78,6 +79,7 @@ export default function UnitDetailsPage() {
           url: `${origin}/units/${unit.slug}`,
           image: gallery[0],
           offers: { '@type': 'Offer', price: displayPrice, priceCurrency: 'EGP' },
+          ...(unit.videos?.length ? { video: unit.videos.map(v => ({ '@type': 'VideoObject', contentUrl: v.url, thumbnailUrl: v.thumbnailUrl, name: title })) } : {}),
         })}
       />
       <Header />
@@ -263,6 +265,10 @@ export default function UnitDetailsPage() {
                   ))}
                 </div>
               </div>
+            )}
+
+            {unit.videos && unit.videos.length > 0 && (
+              <VideoGallery videos={unit.videos} title={t('property.videos')} />
             )}
 
             {/* Installment Plans */}

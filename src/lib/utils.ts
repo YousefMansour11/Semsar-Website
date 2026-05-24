@@ -71,6 +71,19 @@ export function buildSrcSet(url: string, widths: number[], _aspectRatio?: string
     .join(', ');
 }
 
+export function optimizeCloudinaryVideoUrl(url: string): string {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  const uploadStr = '/upload/';
+  const idx = url.indexOf(uploadStr);
+  if (idx === -1) return url;
+  const afterUpload = url.slice(idx + uploadStr.length);
+  const slashIdx = afterUpload.indexOf('/');
+  if (slashIdx === -1) return url;
+  const publicPart = afterUpload.slice(slashIdx);
+  const transforms = 'f_auto,q_auto,vc_auto,so_auto,sp_auto,dpr_auto';
+  return `${url.slice(0, idx + uploadStr.length)}${transforms}${publicPart}`;
+}
+
 export function getBlurDataUrl(url: string): string {
   if (!url || !url.includes('res.cloudinary.com')) return '';
   const idx = url.indexOf('/upload/');

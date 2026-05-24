@@ -154,10 +154,12 @@ export const translations: Record<string, Record<string, string>> = {
     'property.delivery': 'Delivery Date',
     'property.balcony': 'Balcony',
     'property.parking': 'Parking',
+    'property.videos': 'Videos',
     'property.additionalDetails': 'Additional Details',
 
     // General
     'general.yes': 'Yes',
+    'general.more': 'More',
     'general.m2': 'm²',
     'general.back': 'Back',
     'general.projectNotFound': 'Project not found',
@@ -528,10 +530,12 @@ export const translations: Record<string, Record<string, string>> = {
     'property.delivery': 'تاريخ التسليم',
     'property.balcony': 'بلكونة',
     'property.parking': 'موقف سيارات',
+    'property.videos': 'فيديو',
     'property.additionalDetails': 'تفاصيل إضافية',
 
     // General
     'general.yes': 'نعم',
+    'general.more': 'المزيد',
     'general.m2': 'م²',
     'general.back': 'رجوع',
     'general.projectNotFound': 'المشروع غير موجود',

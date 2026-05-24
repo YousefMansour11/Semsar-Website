@@ -14,6 +14,7 @@ import { PremiumImage } from '../components/PremiumImage';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { ReadMore } from '../components/ReadMore';
 import { PropertyDetailSkeleton } from '../components/Skeletons';
+import { VideoGallery } from '../components/videos/VideoGallery';
 
 export default function PropertyDetailsPage() {
   const { slug } = useParams();
@@ -82,6 +83,7 @@ export default function PropertyDetailsPage() {
           url: `${origin}${localizedPath(propPath, language)}`,
           image: gallery[0],
           offers: { '@type': 'Offer', price: displayPrice, priceCurrency: 'EGP' },
+          ...(property.videos?.length ? { video: property.videos.map(v => ({ '@type': 'VideoObject', contentUrl: v.url, thumbnailUrl: v.thumbnailUrl, name: title })) } : {}),
         })}
       />
       <Header />
@@ -299,6 +301,10 @@ export default function PropertyDetailsPage() {
                 ))}
               </div>
             </div>
+            )}
+
+            {property.videos && property.videos.length > 0 && (
+              <VideoGallery videos={property.videos} title={t('property.videos')} />
             )}
           </div>
 

@@ -10,6 +10,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { localizedPath } from '../lib/paths';
 import { PremiumImage } from '../components/PremiumImage';
 import { ProjectDetailSkeleton } from '../components/Skeletons';
+import { VideoGallery } from '../components/videos/VideoGallery';
 
 export default function ProjectDetailsPage() {
   const { slug } = useParams();
@@ -55,6 +56,7 @@ export default function ProjectDetailsPage() {
           url: `${origin}/projects/${project.slug}`,
           image: project.image,
           location: { '@type': 'Place', address: project.location },
+          ...(project.videos?.length ? { video: project.videos.map(v => ({ '@type': 'VideoObject', contentUrl: v.url, thumbnailUrl: v.thumbnailUrl, name })) } : {}),
         })}
       />
       <Header />
@@ -113,6 +115,12 @@ export default function ProjectDetailsPage() {
                 </section>
               );
             })()}
+
+            {project.videos && project.videos.length > 0 && (
+              <section>
+                <VideoGallery videos={project.videos} title={t('property.videos')} />
+              </section>
+            )}
           </div>
 
           <div>

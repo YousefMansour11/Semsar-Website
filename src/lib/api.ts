@@ -15,6 +15,7 @@ import type {
   PropertyStatus,
   ListingType,
   InstallmentPlan,
+  VideoItem,
   SiteSettings,
   BookingPayload,
   LandRequestPayload,
@@ -117,6 +118,17 @@ function adaptImages(raw: any): string[] {
     .filter(Boolean);
 }
 
+function adaptVideos(raw: any): VideoItem[] | undefined {
+  const arr = raw?.videos;
+  if (!Array.isArray(arr) || arr.length === 0) return undefined;
+  return arr.map((v: any) => ({
+    id: v.id ?? v.Id,
+    url: v.url ?? v.Url ?? '',
+    publicId: v.publicId ?? v.PublicId ?? '',
+    thumbnailUrl: v.thumbnailUrl ?? v.ThumbnailUrl ?? undefined,
+  })).filter(v => !!v.url);
+}
+
 function adaptInstallments(raw: any): InstallmentPlan[] {
   const arr = raw?.installments || raw?.installmentPlans || [];
   if (!Array.isArray(arr)) return [];
@@ -194,6 +206,7 @@ export function adaptProperty(raw: any): Property {
 
     image: primary,
     images: images.length ? images : [primary],
+    videos: adaptVideos(raw),
 
     projectId: raw?.projectId != null ? String(raw.projectId) : null,
 
@@ -230,6 +243,7 @@ export function adaptProject(raw: any, units: Property[] = []): Project {
 
     image: primary,
     images: images.length ? images : [primary],
+    videos: adaptVideos(raw),
     highlights: Array.isArray(raw?.highlights) ? raw.highlights : [],
     highlightsAr: Array.isArray(raw?.highlightsAr) ? raw.highlightsAr : undefined,
     unitCount: raw?.unitCount ?? units.length,
