@@ -107,7 +107,7 @@ export function ImageLightbox({ open, images, activeIndex, onClose, onPrev, onNe
           src={optimizeCloudinaryUrl(images[activeIndex], { width: 1200, quality: 'best' })}
           srcSet={buildSrcSet(images[activeIndex], [480, 768, 1080, 1600, 2048]) || undefined}
           sizes="(max-width: 768px) 100vw, 90vw"
-          alt={title ? `${title} - ${t('gallery.counter', { current: String(activeIndex + 1), total: String(images.length) })}` : ''}
+          alt={title ? `${title} - ${t('gallery.counter', undefined, { current: String(activeIndex + 1), total: String(images.length) })}` : ''}
           className="max-h-[85vh] max-w-full sm:max-w-[90vw] object-contain rounded-2xl shadow-2xl shadow-black/50 pointer-events-none select-none"
           draggable={false}
         />

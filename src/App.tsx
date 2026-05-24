@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import * as Sentry from "@sentry/react";
 import { initTracker } from "./lib/tracker";
 import { TrackerProvider } from "./components/TrackerProvider";
+import { PageSkeleton } from "./components/Skeletons";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -45,15 +46,19 @@ function TrackerInit() {
 }
 
 const App = () => (
-  <Sentry.ErrorBoundary fallback={({ error }) => (
+  <Sentry.ErrorBoundary fallback={({ error }) => {
+    const lang = (() => { try { const s = localStorage.getItem('semsar_lang'); if (s === 'ar' || s === 'en') return s; } catch {} return location.pathname.startsWith('/ar') ? 'ar' : 'en'; })();
+    const isAr = lang === 'ar';
+    return (
     <div className="min-h-screen flex items-center justify-center bg-background p-8">
       <div className="text-center space-y-4 max-w-lg">
-        <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Something went wrong</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground">{isAr ? 'حدث خطأ ما' : 'Something went wrong'}</h1>
         <p className="text-muted-foreground text-sm">{error?.message}</p>
-        <button onClick={() => window.location.reload()} className="px-8 py-3.5 bg-gold text-navy rounded-xl font-semibold hover:bg-gold-dark hover:text-white transition-colors">Reload Page</button>
+        <button onClick={() => window.location.reload()} className="px-8 py-3.5 bg-gold text-navy rounded-xl font-semibold hover:bg-gold-dark hover:text-white transition-colors">{isAr ? 'إعادة تحميل الصفحة' : 'Reload Page'}</button>
       </div>
     </div>
-  )}>
+    );
+  }}>
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
@@ -65,7 +70,7 @@ const App = () => (
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <TrackerProvider>
               <ScrollManager>
-                <Suspense fallback={null}>
+                <Suspense fallback={<PageSkeleton />}>
                   <Routes>
                     {/* Language-prefixed routes */}
                     <Route path="/en" element={<LangWrap lang="en" />}>

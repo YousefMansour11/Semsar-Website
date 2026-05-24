@@ -35,8 +35,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = language;
   }, [language]);
 
-  const t = useCallback((key: string, fallback?: string): string => {
-    return (translations[language] as Record<string, string>)[key] || (translations['en'] as Record<string, string>)[key] || fallback || key;
+  const t = useCallback((key: string, fallback?: string, params?: Record<string, string>): string => {
+    let value = (translations[language] as Record<string, string>)[key] || (translations['en'] as Record<string, string>)[key] || fallback || key;
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => { value = value.replace(`{${k}}`, v); });
+    }
+    return value;
   }, [language]);
 
   const localeStr = language === 'ar' ? 'ar-EG' : 'en-US';

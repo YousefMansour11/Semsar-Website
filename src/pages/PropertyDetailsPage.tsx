@@ -126,7 +126,7 @@ export default function PropertyDetailsPage() {
               {gallery.length > 1 && (
                 <div className="flex gap-2 p-2 overflow-x-auto bg-card">
                   {gallery.map((img, i) => (
-                    <button key={i} onClick={() => setActiveImage(i)} aria-label={`${t('gallery.counter', { current: String(i + 1), total: String(gallery.length) })}`} className={`shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${i === activeImage ? 'border-secondary' : 'border-transparent opacity-70'}`}>
+                    <button key={img} onClick={() => setActiveImage(i)} aria-label={t('gallery.counter', undefined, { current: String(i + 1), total: String(gallery.length) })} className={`shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${i === activeImage ? 'border-secondary' : 'border-transparent opacity-70'}`}>
                       <PremiumImage src={img} alt="" width={300} height={200} options={{ quality: 'good' }} srcsetWidths={[160, 320, 640]} sizes="80px" className="w-full h-full" />
                     </button>
                   ))}
@@ -290,7 +290,7 @@ export default function PropertyDetailsPage() {
               <div className="w-10 h-1 bg-gold rounded-full mb-5" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {(language === 'ar' ? (property.featuresAr || property.features) : property.features).map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3 bg-muted/30 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-border">
+                  <div key={feature} className="flex items-center gap-3 bg-muted/30 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-border">
                     <div className="w-6 h-6 rounded-full bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0">
                       <Check className="w-3.5 h-3.5" />
                     </div>

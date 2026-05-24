@@ -27,7 +27,7 @@ export function BookViewingModal({ isOpen, onClose, propertyId = null, unitId = 
     e.preventDefault();
     if (submittingRef.current) return;
     if (Date.now() - formStartTime.current < 3000) {
-      setErrorMsg(t('form.error.submitFailed'));
+      setErrorMsg(t('error.submitFailed'));
       return;
     }
     submittingRef.current = true;
@@ -38,7 +38,7 @@ export function BookViewingModal({ isOpen, onClose, propertyId = null, unitId = 
     const uId = safeId(unitId);
     const pId = safeId(propertyId);
     if (!uId && !pId) {
-      setErrorMsg(t('form.error.submitFailed'));
+      setErrorMsg(t('error.submitFailed'));
       setStatus('idle');
       submittingRef.current = false;
       return;
